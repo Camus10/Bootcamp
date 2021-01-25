@@ -1,0 +1,25 @@
+module.exports = function bookApartment(req, res, next){
+    booking
+        .create(req.booking)
+        .then(function(data){
+            notifier.sendBookingConfirmation(data)
+                .then(function(result){
+                    statistics.log(data)
+                        .then(function(result){
+                            log.debug('booking-succeeded');
+                        })
+                        .catch(function(err){
+                            next(err);
+                        });
+                })
+                .catch(function(err){
+                    next(err);
+                });
+        })
+        .catch(function(err){
+            res.send(200);
+        })
+        .catch(function(err){
+            next(err);
+        });
+}
